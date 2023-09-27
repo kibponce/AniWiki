@@ -1,11 +1,11 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import Home from "./pages/Home";
+import Pages from "./pages";
 import GlobalStyles from "./utils/styles";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <GlobalStyles />
-    <Home />
+    <Pages />
   </React.StrictMode>
 );
