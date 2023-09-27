@@ -1,15 +1,27 @@
+import styled from "styled-components";
 import { PropsWithChildren } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 
 const Layout: React.FC<PropsWithChildren> = ({ children }) => {
   return (
-    <div>
+    <StyledLayout>
       <Header />
-      {children}
+      <Body>{children}</Body>
       <Footer />
-    </div>
+    </StyledLayout>
   );
 };
+
+const StyledLayout = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const Body = styled.div`
+  min-height: calc(100vh - 225px);
+  display: flex;
+  flex-direction: column;
+`;
 
 export default Layout;
