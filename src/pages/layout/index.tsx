@@ -19,9 +19,10 @@ const StyledLayout = styled.div`
 `;
 
 const Body = styled.div`
-  min-height: calc(100vh - 225px);
+  min-height: calc(100vh - 150px);
   display: flex;
   flex-direction: column;
+  background: #edf1f5;
 `;
 
 export default Layout;
