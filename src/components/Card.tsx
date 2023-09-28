@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { media } from "../utils/styles";
 
 const Card = () => {
   return (
@@ -14,11 +15,6 @@ const Card = () => {
             Rudeus heads north with new friends and powers in search of
             adventure and those he once knew. Note: Includes episode 0. The The
             second season of Mushoku Tensei: Isekai Ittara Honki Dasu. Rudeus
-            heads north with new friends and powers in search of adventure and
-            those he once knew. Note: Includes episode 0. The The second season
-            of Mushoku Tensei: Isekai Ittara Honki Dasu. Rudeus heads north with
-            new friends and powers in search of adventure and those he once
-            knew. Note: Includes episode 0. The
           </Summary>
         </CardData>
       </CardInfo>

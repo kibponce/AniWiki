@@ -1,7 +1,53 @@
-import { createGlobalStyle } from "styled-components";
+import { createGlobalStyle, css, RuleSet } from "styled-components";
+interface Size {
+  xs: string;
+  sm: string;
+  md: string;
+  lg: string;
+  xl: string;
+}
+interface Media {
+  xs: (props: any) => RuleSet<object>;
+  sm: (props: any) => RuleSet<object>;
+  md: (props: any) => RuleSet<object>;
+  lg: (props: any) => RuleSet<object>;
+  xl: (props: any) => RuleSet<object>;
+}
 
-export const widths = {
-  regularPageWidth: 1400,
+export const size: Size = {
+  xs: "400px", // for small screen mobile
+  sm: "600px", // for mobile screen
+  md: "900px", // for tablets
+  lg: "1280px", // for laptops
+  xl: "1440px", // for desktop / monitors
+};
+
+export const media: Media = {
+  xs: (props: any): RuleSet<object> => css`
+    @media (max-width: ${size.xs}) {
+      ${css(props)};
+    }
+  `,
+  sm: (props: any): RuleSet<object> => css`
+    @media (max-width: ${size.sm}) {
+      ${css(props)};
+    }
+  `,
+  md: (props: any): RuleSet<object> => css`
+    @media (max-width: ${size.md}) {
+      ${css(props)};
+    }
+  `,
+  lg: (props: any): RuleSet<object> => css`
+    @media (max-width: ${size.lg}) {
+      ${css(props)};
+    }
+  `,
+  xl: (props: any): RuleSet<object> => css`
+    @media (max-width: ${size.xl}) {
+      ${css(props)};
+    }
+  `,
 };
 
 const GlobalStyles = createGlobalStyle`

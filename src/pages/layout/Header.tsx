@@ -1,7 +1,7 @@
 import { FC } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { widths } from "../../utils/styles";
+import { size, media } from "../../utils/styles";
 
 interface HeaderProps {
   isSingle?: boolean;
@@ -30,8 +30,13 @@ const StyledHeader = styled.div<HeaderProps>`
 `;
 
 const Container = styled.div`
-  width: ${widths.regularPageWidth}px;
+  width: ${size.xl};
   margin: 0 auto;
+
+  ${media.xl`
+    width: 100%;
+    padding: 0 15px;
+  `}
 `;
 
 const HeaderBar = styled.div`

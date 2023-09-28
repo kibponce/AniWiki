@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { widths } from "../../utils/styles";
+import { size, media } from "../../utils/styles";
 
 const Footer = () => {
   return <StyledFooter></StyledFooter>;
@@ -7,7 +7,6 @@ const Footer = () => {
 
 const StyledFooter = styled.div`
   display: flex;
-  min-width: ${widths.regularPageWidth}px;
   min-height: 75px;
   background: #2b2d42;
   color: #bdc1ff;
@@ -15,6 +14,10 @@ const StyledFooter = styled.div`
   align-items: center;
   padding: 20px;
   justify-items: center;
+
+  ${media.xl`
+    padding: 0 15px;
+  `}
 `;
 
 export default Footer;

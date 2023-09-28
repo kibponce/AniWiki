@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { widths } from "../utils/styles";
+import { size, media } from "../utils/styles";
 import Layout from "./layout";
 import Data from "../components/Data";
 import CharacterCard from "../components/CharacterCard";
@@ -71,24 +71,35 @@ const BannerImage = styled.div`
 
 const Wrapper = styled.div`
   min-height: 300px;
-  max-height: 450px;
   background: #ffffff;
 `;
 
 const Details = styled.div`
   height: 100%;
-  width: ${widths.regularPageWidth}px;
+  width: ${size.xl};
   margin: 0 auto;
   padding: 25px 0;
   display: grid;
   grid-column-gap: 30px;
   grid-template-columns: 215px auto;
+
+  ${media.xl`
+    width: 100%;
+  `}
+
+  ${media.md`
+    grid-template-columns: 145px auto;
+  `}
 `;
 
 const StyledImage = styled.img`
   border-radius: 2px;
   width: 100%;
   box-shadow: 0 0 29px rgba(49, 54, 68, 0.25);
+
+  ${media.xl`
+    margin-left: 15px;
+  `}
 `;
 
 const Content = styled.div`
@@ -105,11 +116,19 @@ const SideInfo = styled.div`
   border-radius: 2px;
   width: 100%;
   background: #ffffff;
+
+  ${media.xl`
+    margin-left: 15px;
+  `}
 `;
 
 const Information = styled.div`
   padding: 18px;
   color: #6e6e6e;
+
+  ${media.xl`
+    margin-left: 15px;
+  `}
 `;
 
 const CharactersContainer = styled.div`
@@ -118,6 +137,15 @@ const CharactersContainer = styled.div`
   grid-template-columns: repeat(3, 1fr);
   grid-column-gap: 20px;
   grid-row-gap: 15px;
+
+  ${media.lg`
+    grid-template-columns: repeat(2, 1fr);
+    padding-right: 15px;
+  `}
+
+  ${media.md`
+    grid-template-columns: 100%;
+  `}
 `;
 
 export default Single;
