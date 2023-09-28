@@ -47,6 +47,11 @@ const GlobalStyles = createGlobalStyle`
     font-size: 1.3rem;
   }
 
+  h6 {
+    font-size: 1.15rem;
+  }
+
+
 
   @keyframes in {
     0% {     

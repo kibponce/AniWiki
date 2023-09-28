@@ -1,12 +1,17 @@
+import { FC } from "react";
 import styled from "styled-components";
 import { PropsWithChildren } from "react";
 import Header from "./Header";
 import Footer from "./Footer";
 
-const Layout: React.FC<PropsWithChildren> = ({ children }) => {
+interface LayoutProps {
+  isSingle?: boolean;
+}
+
+const Layout: FC<PropsWithChildren<LayoutProps>> = ({ children, isSingle }) => {
   return (
     <StyledLayout>
-      <Header />
+      <Header isSingle={isSingle} />
       <Body>{children}</Body>
       <Footer />
     </StyledLayout>

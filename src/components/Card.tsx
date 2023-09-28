@@ -3,7 +3,6 @@ import styled from "styled-components";
 const Card = () => {
   return (
     <CardContainer>
-      <Overlay />
       <CardInfo>
         <CardImage>
           <Image src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx146065-IjirxRK26O03.png" />
@@ -13,7 +12,13 @@ const Card = () => {
           <Summary>
             The second season of Mushoku Tensei: Isekai Ittara Honki Dasu.
             Rudeus heads north with new friends and powers in search of
-            adventure and those he once knew. Note: Includes episode 0. The
+            adventure and those he once knew. Note: Includes episode 0. The The
+            second season of Mushoku Tensei: Isekai Ittara Honki Dasu. Rudeus
+            heads north with new friends and powers in search of adventure and
+            those he once knew. Note: Includes episode 0. The The second season
+            of Mushoku Tensei: Isekai Ittara Honki Dasu. Rudeus heads north with
+            new friends and powers in search of adventure and those he once
+            knew. Note: Includes episode 0. The
           </Summary>
         </CardData>
       </CardInfo>
@@ -24,15 +29,6 @@ const Card = () => {
     </CardContainer>
   );
 };
-
-const Overlay = styled.div`
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  background: #000;
-  opacity: 0.4;
-  display: none;
-`;
 
 const CardContainer = styled.div`
   animation: in 0.3s linear;
@@ -45,9 +41,6 @@ const CardContainer = styled.div`
     0 4px 4px rgba(103, 132, 187, 0.05);
   cursor: pointer;
   position: relative;
-  &:hover ${Overlay} {
-    display: block;
-  }
 `;
 
 const CardInfo = styled.div`
