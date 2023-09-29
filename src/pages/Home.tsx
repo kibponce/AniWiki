@@ -14,12 +14,10 @@ import { debounce } from "lodash";
 const PER_PAGE = 20;
 
 const Home = () => {
-  const [search, setSearch] = useState("");
-  const [page, setPage] = useState(1);
   const [mediaLists, setMediaLists] = useState<Array<Media | null>>([]);
   const { loading, error, data, refetch } = useQuery(getMediaListQuery, {
     variables: {
-      page: page,
+      page: 1,
       perPage: PER_PAGE,
       sort: [MediaSort.TrendingDesc, MediaSort.PopularityDesc],
     },
