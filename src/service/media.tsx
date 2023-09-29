@@ -1,4 +1,5 @@
 import { gql } from "../__generated__/gql";
+import { MediaSort } from "../__generated__/graphql";
 import { FragmentType, useFragment } from "../__generated__/fragment-masking";
 
 export const mediaFragment = gql(`
@@ -42,7 +43,12 @@ export const getMediaListQuery = gql(`
   }
 `);
 
+// Media Fragment Type
 export type Media = FragmentType<typeof mediaFragment>;
 
+// parse Media item to consume
 export const parseMediaFragment = (item: Media) =>
   useFragment(mediaFragment, item);
+
+// enums
+export { MediaSort };

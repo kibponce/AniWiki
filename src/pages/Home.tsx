@@ -5,11 +5,9 @@ import { size, media } from "../utils/styles";
 import Layout from "./layout";
 import Input from "../components/Input";
 import Card from "../components/Card";
-// GraphQL service
-import { MediaSort } from "../__generated__/graphql";
-import { getMediaListQuery, Media } from "../queries/media";
-
-import { debounce } from "lodash";
+// GraphQL - media service
+import { getMediaListQuery, Media, MediaSort } from "../service/media";
+import { debounce, isEmpty } from "lodash";
 
 const PER_PAGE = 20;
 
@@ -26,7 +24,7 @@ const Home = () => {
   const handleSearch = debounce((e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     refetch({
-      search: value,
+      search: !isEmpty(value) ? value : null,
     });
   }, 500);
 

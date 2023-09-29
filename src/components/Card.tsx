@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Media, parseMediaFragment } from "../queries/media";
+import { Media, parseMediaFragment } from "../service/media";
 
 interface CardProps {
   item: Media;
