@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { useQuery } from "@apollo/client";
 import styled from "styled-components";
 import { size, media } from "../utils/styles";
@@ -7,17 +7,17 @@ import Input from "../components/Input";
 import Card from "../components/Card";
 // GraphQL service
 import { MediaSort } from "../__generated__/graphql";
-import { mediaFragment, getMediaListQuery } from "../queries/media";
-import { FragmentType } from "../__generated__/fragment-masking";
+import { getMediaListQuery, Media } from "../queries/media";
+
+import { debounce } from "lodash";
 
 const PER_PAGE = 20;
 
 const Home = () => {
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
-  const [mediaLists, setMediaLists] = useState<
-    Array<FragmentType<typeof mediaFragment> | null>
-  >([]);
-  const { loading, error, data } = useQuery(getMediaListQuery, {
+  const [mediaLists, setMediaLists] = useState<Array<Media | null>>([]);
+  const { loading, error, data, refetch } = useQuery(getMediaListQuery, {
     variables: {
       page: page,
       perPage: PER_PAGE,
@@ -25,9 +25,16 @@ const Home = () => {
     },
   });
 
+  const handleSearch = debounce((e: ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    refetch({
+      search: value,
+    });
+  }, 500);
+
   useEffect(() => {
     if (data?.Page?.media) {
-      setMediaLists([...mediaLists, ...data.Page.media]);
+      setMediaLists(data.Page.media);
     }
   }, [data]);
 
@@ -35,7 +42,7 @@ const Home = () => {
     <Layout>
       <SearchContainer>
         <SearchWrapper>
-          <Input placeholder="Search Anime" />
+          <Input placeholder="Search Anime" onChange={handleSearch} />
         </SearchWrapper>
       </SearchContainer>
       <ListsContainer>
