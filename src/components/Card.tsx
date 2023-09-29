@@ -1,26 +1,38 @@
 import styled from "styled-components";
-import { media } from "../utils/styles";
+import { Media, parseMediaFragment } from "../queries/media";
 
-const Card = () => {
+interface CardProps {
+  item: Media;
+}
+
+const Card = ({ item }: CardProps) => {
+  const cardItem = parseMediaFragment(item);
+
   return (
     <CardContainer>
       <CardInfo>
         <CardImage>
-          <Image src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx146065-IjirxRK26O03.png" />
+          {cardItem?.coverImage?.large && (
+            <Image src={cardItem?.coverImage?.large} />
+          )}
         </CardImage>
         <CardData>
           <Type>TV Show</Type>
           <Summary>
-            The second season of Mushoku Tensei: Isekai Ittara Honki Dasu.
-            Rudeus heads north with new friends and powers in search of
-            adventure and those he once knew. Note: Includes episode 0. The The
-            second season of Mushoku Tensei: Isekai Ittara Honki Dasu. Rudeus
+            {cardItem?.description && (
+              <div
+                dangerouslySetInnerHTML={{ __html: cardItem?.description }}
+              />
+            )}
           </Summary>
         </CardData>
       </CardInfo>
       <CardFooter>
-        <CardTitle>Mushoku Tensei II: Isekai Ittara Honki Dasu</CardTitle>
-        <CardAuthor>Studio Blind</CardAuthor>
+        <CardTitle>{cardItem?.title?.userPreferred}</CardTitle>
+        {/* Get the first element of array only */}
+        <CardAuthor>
+          {cardItem?.studios?.nodes && cardItem?.studios?.nodes[0]?.name}
+        </CardAuthor>
       </CardFooter>
     </CardContainer>
   );
@@ -42,7 +54,7 @@ const CardContainer = styled.div`
 const CardInfo = styled.div`
   background: #ffffff;
   display: grid;
-  grid-template-columns: 165px auto;
+  grid-template-columns: 145px auto;
 `;
 
 const CardFooter = styled.div`

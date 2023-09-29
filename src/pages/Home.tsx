@@ -1,10 +1,36 @@
+import { useState, useEffect } from "react";
+import { useQuery } from "@apollo/client";
 import styled from "styled-components";
 import { size, media } from "../utils/styles";
 import Layout from "./layout";
 import Input from "../components/Input";
 import Card from "../components/Card";
+// GraphQL service
+import { MediaSort } from "../__generated__/graphql";
+import { mediaFragment, getMediaListQuery } from "../queries/media";
+import { FragmentType } from "../__generated__/fragment-masking";
+
+const PER_PAGE = 20;
 
 const Home = () => {
+  const [page, setPage] = useState(1);
+  const [mediaLists, setMediaLists] = useState<
+    Array<FragmentType<typeof mediaFragment> | null>
+  >([]);
+  const { loading, error, data } = useQuery(getMediaListQuery, {
+    variables: {
+      page: page,
+      perPage: PER_PAGE,
+      sort: [MediaSort.TrendingDesc, MediaSort.PopularityDesc],
+    },
+  });
+
+  useEffect(() => {
+    if (data?.Page?.media) {
+      setMediaLists([...mediaLists, ...data.Page.media]);
+    }
+  }, [data]);
+
   return (
     <Layout>
       <SearchContainer>
@@ -14,10 +40,7 @@ const Home = () => {
       </SearchContainer>
       <ListsContainer>
         <CardsContainer>
-          <Card />
-          <Card />
-          <Card />
-          <Card />
+          {mediaLists?.map((item) => item && <Card item={item} />)}
         </CardsContainer>
       </ListsContainer>
     </Layout>
