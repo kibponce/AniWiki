@@ -6,11 +6,11 @@ import { size, media } from "../utils/styles";
 import Layout from "./layout";
 import Data from "../components/Data";
 import CharacterCard from "../components/CharacterCard";
+import QueryResult from "../components/QueryResult";
 
 // GraphQL - media service
 import {
   getMediaDetails,
-  Media,
   CharacterRole,
   parseMediaFragment,
 } from "../service/media";
@@ -32,58 +32,62 @@ const Single = () => {
     () => data?.Media && parseMediaFragment(data?.Media),
     [data]
   );
-  console.log("mediaDetails", data?.Media?.characters);
+
   return (
     <Layout isSingle={true}>
-      <BannerImage image={mediaDetails?.bannerImage!} />
-      <Wrapper>
+      <QueryResult loading={loading} error={error} data={data}>
+        <BannerImage image={mediaDetails?.bannerImage!} />
+        <Wrapper>
+          <Details>
+            <StyledImage
+              src={mediaDetails?.coverImage?.large!}
+              alt="cover-image"
+            />
+            <Content>
+              <h5>{mediaDetails?.title?.userPreferred}</h5>
+              {mediaDetails?.description && (
+                <Summary
+                  dangerouslySetInnerHTML={{
+                    __html: mediaDetails?.description,
+                  }}
+                />
+              )}
+            </Content>
+          </Details>
+        </Wrapper>
         <Details>
-          <StyledImage
-            src={mediaDetails?.coverImage?.large!}
-            alt="cover-image"
-          />
-          <Content>
-            <h5>{mediaDetails?.title?.userPreferred}</h5>
-            {mediaDetails?.description && (
-              <Summary
-                dangerouslySetInnerHTML={{ __html: mediaDetails?.description }}
+          <SideInfo>
+            <Information>
+              <Data type="Format" value={mediaDetails?.format?.toString()} />
+              <Data
+                type="Episode Duration"
+                value={`${mediaDetails?.duration} mins`}
               />
-            )}
+              <Data type="Status" value={mediaDetails?.status?.toString()} />
+              <Data
+                type="Popularity"
+                value={mediaDetails?.popularity?.toString()}
+              />
+              <Data
+                type="Favourites"
+                value={mediaDetails?.favourites?.toString()}
+              />
+            </Information>
+          </SideInfo>
+          <Content>
+            <h6>Characters</h6>
+            <CharactersContainer>
+              {data?.Media?.characters?.nodes?.map((character) => (
+                <CharacterCard
+                  name={character?.name?.userPreferred}
+                  image={character?.image?.large}
+                  gender={character?.gender}
+                />
+              ))}
+            </CharactersContainer>
           </Content>
         </Details>
-      </Wrapper>
-      <Details>
-        <SideInfo>
-          <Information>
-            <Data type="Format" value={mediaDetails?.format?.toString()} />
-            <Data
-              type="Episode Duration"
-              value={`${mediaDetails?.duration} mins`}
-            />
-            <Data type="Status" value={mediaDetails?.status?.toString()} />
-            <Data
-              type="Popularity"
-              value={mediaDetails?.popularity?.toString()}
-            />
-            <Data
-              type="Favourites"
-              value={mediaDetails?.favourites?.toString()}
-            />
-          </Information>
-        </SideInfo>
-        <Content>
-          <h6>Characters</h6>
-          <CharactersContainer>
-            {data?.Media?.characters?.nodes?.map((character) => (
-              <CharacterCard
-                name={character?.name?.userPreferred}
-                image={character?.image?.large}
-                gender={character?.gender}
-              />
-            ))}
-          </CharactersContainer>
-        </Content>
-      </Details>
+      </QueryResult>
     </Layout>
   );
 };
