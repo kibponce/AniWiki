@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { size, media } from "../../utils/styles";
+import { media } from "../../utils/styles";
 
 const Footer = () => {
   return <StyledFooter></StyledFooter>;
