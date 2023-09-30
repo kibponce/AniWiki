@@ -23,6 +23,7 @@ const Home = () => {
 
   const handleSearch = debounce((e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
+    setPage(1);
     refetch({
       search: !isEmpty(value) ? value : null,
     });
