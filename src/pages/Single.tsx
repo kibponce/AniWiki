@@ -66,7 +66,7 @@ const Single = () => {
               value={mediaDetails?.popularity?.toString()}
             />
             <Data
-              type="Favourits"
+              type="Favourites"
               value={mediaDetails?.favourites?.toString()}
             />
           </Information>
