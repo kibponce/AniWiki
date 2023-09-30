@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-import { Media, parseMediaFragment, MediaFormat } from "../service/media";
+import { Media, parseMediaFragment } from "../service/media";
 
 interface CardProps {
   item: Media;
