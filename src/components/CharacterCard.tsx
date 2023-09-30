@@ -1,26 +1,26 @@
+import { FC } from "react";
 import styled from "styled-components";
 
 interface NameProps {
   align: "left" | "right";
 }
 
-const CharacterCard = () => {
+interface CharacterProps {
+  name?: string | null;
+  image?: string | null;
+  gender?: string | null;
+}
+
+const CharacterCard: FC<CharacterProps> = ({ name, image, gender }) => {
   return (
     <CardContainer>
       <Character>
-        <Image />
+        <Image image={image} />
         <Name align="left">
-          <strong>Luffy D. Monkey</strong>
-          <Role>Main</Role>
+          <strong>{name}</strong>
+          <Info>{gender}</Info>
         </Name>
       </Character>
-      <Staff>
-        <Name align="right">
-          <strong>Mayumi Tanaka</strong>
-          <Role>Japanese</Role>
-        </Name>
-        <Image />
-      </Staff>
     </CardContainer>
   );
 };
@@ -30,7 +30,6 @@ const CardContainer = styled.div`
   height: 100px;
   border-radius: 3px;
   display: grid;
-  grid-template-columns: 50% 50%;
 `;
 
 const Character = styled.div`
@@ -38,13 +37,8 @@ const Character = styled.div`
   grid-template-columns: 65px auto;
 `;
 
-const Staff = styled.div`
-  display: grid;
-  grid-template-columns: auto 65px;
-`;
-
-const Image = styled.div`
-  background-image: url(https://s4.anilist.co/file/anilistcdn/character/large/b40-q0YepZ4VUZUO.png);
+const Image = styled.div<CharacterProps>`
+  background-image: ${({ image }) => (image ? `url(${image})` : null)};
   background-position: 50%;
   background-repeat: no-repeat;
   background-size: cover;
@@ -56,7 +50,7 @@ const Name = styled.div<NameProps>`
   text-align: ${({ align }) => align};
 `;
 
-const Role = styled.p`
+const Info = styled.p`
   font-size: 0.7rem;
 `;
 

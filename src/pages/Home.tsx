@@ -1,4 +1,4 @@
-import { useState, useEffect, ChangeEvent } from "react";
+import { useState, useEffect, useRef, ChangeEvent, useCallback } from "react";
 import { useQuery } from "@apollo/client";
 import styled from "styled-components";
 import { size, media } from "../utils/styles";
@@ -9,14 +9,14 @@ import Card from "../components/Card";
 import { getMediaListQuery, Media, MediaSort } from "../service/media";
 import { debounce, isEmpty } from "lodash";
 
-const PER_PAGE = 20;
-
 const Home = () => {
+  const loader = useRef(null);
+  const [page, setPage] = useState(1);
   const [mediaLists, setMediaLists] = useState<Array<Media | null>>([]);
   const { loading, error, data, refetch } = useQuery(getMediaListQuery, {
     variables: {
-      page: 1,
-      perPage: PER_PAGE,
+      page: page,
+      perPage: 10,
       sort: [MediaSort.TrendingDesc, MediaSort.PopularityDesc],
     },
   });
@@ -28,11 +28,36 @@ const Home = () => {
     });
   }, 500);
 
+  const handleObserver = useCallback(
+    (entries: any[]) => {
+      const target = entries[0];
+      const hasNextPage = data?.Page?.pageInfo?.hasNextPage || false;
+      if (target.isIntersecting && hasNextPage) {
+        setPage((prev) => prev + 1);
+      }
+    },
+    [data]
+  );
+
   useEffect(() => {
-    if (data?.Page?.media) {
-      setMediaLists(data.Page.media);
+    const option = {
+      root: null,
+      rootMargin: "20px",
+      threshold: 0,
+    };
+    const observer = new IntersectionObserver(handleObserver, option);
+    if (loader.current) observer.observe(loader.current);
+  }, [handleObserver, loader]);
+
+  useEffect(() => {
+    const mediaCollection = data?.Page?.media || [];
+
+    if (page === 1) {
+      setMediaLists(mediaCollection);
+    } else {
+      setMediaLists((prev) => [...prev, ...mediaCollection]);
     }
-  }, [data]);
+  }, [data, page]);
 
   return (
     <Layout>
@@ -42,10 +67,19 @@ const Home = () => {
         </SearchWrapper>
       </SearchContainer>
       <ListsContainer>
-        <CardsContainer>
-          {mediaLists?.map((item) => item && <Card item={item} />)}
-        </CardsContainer>
+        <h6>Trending</h6>
+        {mediaLists.length > 0 && (
+          <CardsContainer>
+            {mediaLists.map(
+              (item, index) => item && <Card item={item} key={index} />
+            )}
+          </CardsContainer>
+        )}
+        {/* TODO: enhance UI */}
+        {loading && <p>Loading...</p>}
+        {error && <p>{error.message}</p>}
       </ListsContainer>
+      <div ref={loader}></div>
     </Layout>
   );
 };
@@ -83,6 +117,8 @@ const CardsContainer = styled.div`
   grid-template-columns: repeat(3, minmax(390px, 460px));
   grid-template-rows: repeat(auto-fill, 300px);
   grid-gap: 35px 30px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 
   ${media.xl`
     grid-template-columns: repeat(2, minmax(390px, 50%));

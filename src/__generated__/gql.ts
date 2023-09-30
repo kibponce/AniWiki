@@ -13,8 +13,9 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Therefore it is highly recommended to use the babel or swc plugin for production.
  */
 const documents = {
-    "\n  fragment MediaFields on Media {\n    id\n    title {\n      english\n      native\n      userPreferred\n    }\n    coverImage {\n      color\n      extraLarge\n      large\n      medium\n    }\n    bannerImage\n    studios {\n      nodes {\n        name\n      }\n    }\n    description\n  }\n": types.MediaFieldsFragmentDoc,
+    "\n  fragment MediaFields on Media {\n    id\n    title {\n      english\n      native\n      userPreferred\n    }\n    coverImage {\n      color\n      extraLarge\n      large\n      medium\n    }\n    bannerImage\n    studios {\n      nodes {\n        name\n      }\n    }\n    description\n    format\n    duration\n    status\n    popularity\n    favourites\n  }\n": types.MediaFieldsFragmentDoc,
     "\n  query GetMediaLists($page: Int, $perPage: Int, $sort: [MediaSort], $search: String) {\n    Page(page: $page, perPage: $perPage) {\n      media(sort: $sort, search: $search) {\n        ...MediaFields\n      }\n      pageInfo {\n        total\n        perPage\n        currentPage\n        lastPage\n        hasNextPage\n      }\n    }\n  }\n": types.GetMediaListsDocument,
+    "\n  query GetMediaDetails($mediaId: Int, $role: CharacterRole) {\n    Media(id: $mediaId) {\n      ...MediaFields\n      characters(role: $role) {\n        nodes {\n          name {\n            userPreferred\n            full\n            first\n            last\n          }\n          image {\n            large\n            medium\n          }\n          gender\n        }\n      }\n    }\n  }\n": types.GetMediaDetailsDocument,
 };
 
 /**
@@ -34,11 +35,15 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  fragment MediaFields on Media {\n    id\n    title {\n      english\n      native\n      userPreferred\n    }\n    coverImage {\n      color\n      extraLarge\n      large\n      medium\n    }\n    bannerImage\n    studios {\n      nodes {\n        name\n      }\n    }\n    description\n  }\n"): (typeof documents)["\n  fragment MediaFields on Media {\n    id\n    title {\n      english\n      native\n      userPreferred\n    }\n    coverImage {\n      color\n      extraLarge\n      large\n      medium\n    }\n    bannerImage\n    studios {\n      nodes {\n        name\n      }\n    }\n    description\n  }\n"];
+export function gql(source: "\n  fragment MediaFields on Media {\n    id\n    title {\n      english\n      native\n      userPreferred\n    }\n    coverImage {\n      color\n      extraLarge\n      large\n      medium\n    }\n    bannerImage\n    studios {\n      nodes {\n        name\n      }\n    }\n    description\n    format\n    duration\n    status\n    popularity\n    favourites\n  }\n"): (typeof documents)["\n  fragment MediaFields on Media {\n    id\n    title {\n      english\n      native\n      userPreferred\n    }\n    coverImage {\n      color\n      extraLarge\n      large\n      medium\n    }\n    bannerImage\n    studios {\n      nodes {\n        name\n      }\n    }\n    description\n    format\n    duration\n    status\n    popularity\n    favourites\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function gql(source: "\n  query GetMediaLists($page: Int, $perPage: Int, $sort: [MediaSort], $search: String) {\n    Page(page: $page, perPage: $perPage) {\n      media(sort: $sort, search: $search) {\n        ...MediaFields\n      }\n      pageInfo {\n        total\n        perPage\n        currentPage\n        lastPage\n        hasNextPage\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetMediaLists($page: Int, $perPage: Int, $sort: [MediaSort], $search: String) {\n    Page(page: $page, perPage: $perPage) {\n      media(sort: $sort, search: $search) {\n        ...MediaFields\n      }\n      pageInfo {\n        total\n        perPage\n        currentPage\n        lastPage\n        hasNextPage\n      }\n    }\n  }\n"];
+/**
+ * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function gql(source: "\n  query GetMediaDetails($mediaId: Int, $role: CharacterRole) {\n    Media(id: $mediaId) {\n      ...MediaFields\n      characters(role: $role) {\n        nodes {\n          name {\n            userPreferred\n            full\n            first\n            last\n          }\n          image {\n            large\n            medium\n          }\n          gender\n        }\n      }\n    }\n  }\n"): (typeof documents)["\n  query GetMediaDetails($mediaId: Int, $role: CharacterRole) {\n    Media(id: $mediaId) {\n      ...MediaFields\n      characters(role: $role) {\n        nodes {\n          name {\n            userPreferred\n            full\n            first\n            last\n          }\n          image {\n            large\n            medium\n          }\n          gender\n        }\n      }\n    }\n  }\n"];
 
 export function gql(source: string) {
   return (documents as any)[source] ?? {};

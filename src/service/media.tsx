@@ -1,5 +1,9 @@
 import { gql } from "../__generated__/gql";
-import { MediaSort } from "../__generated__/graphql";
+import {
+  MediaSort,
+  CharacterRole,
+  MediaFormat,
+} from "../__generated__/graphql";
 import { FragmentType, useFragment } from "../__generated__/fragment-masking";
 
 export const mediaFragment = gql(`
@@ -23,6 +27,11 @@ export const mediaFragment = gql(`
       }
     }
     description
+    format
+    duration
+    status
+    popularity
+    favourites
   }
 `);
 
@@ -43,6 +52,29 @@ export const getMediaListQuery = gql(`
   }
 `);
 
+export const getMediaDetails = gql(`
+  query GetMediaDetails($mediaId: Int, $role: CharacterRole) {
+    Media(id: $mediaId) {
+      ...MediaFields
+      characters(role: $role) {
+        nodes {
+          name {
+            userPreferred
+            full
+            first
+            last
+          }
+          image {
+            large
+            medium
+          }
+          gender
+        }
+      }
+    }
+  }
+`);
+
 // Media Fragment Type
 export type Media = FragmentType<typeof mediaFragment>;
 
@@ -51,4 +83,4 @@ export const parseMediaFragment = (item: Media) =>
   useFragment(mediaFragment, item);
 
 // enums
-export { MediaSort };
+export { MediaSort, CharacterRole, MediaFormat };

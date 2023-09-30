@@ -1,58 +1,86 @@
+import { useMemo } from "react";
 import styled from "styled-components";
+import { useQuery } from "@apollo/client";
+import { useParams } from "react-router-dom";
 import { size, media } from "../utils/styles";
 import Layout from "./layout";
 import Data from "../components/Data";
 import CharacterCard from "../components/CharacterCard";
 
+// GraphQL - media service
+import {
+  getMediaDetails,
+  Media,
+  CharacterRole,
+  parseMediaFragment,
+} from "../service/media";
+
+interface BannerProps {
+  image?: string;
+}
+
 const Single = () => {
+  const { id = "" } = useParams();
+  const { loading, error, data } = useQuery(getMediaDetails, {
+    variables: {
+      mediaId: Number(id),
+      role: CharacterRole.Main,
+    },
+  });
+
+  const mediaDetails = useMemo(
+    () => data?.Media && parseMediaFragment(data?.Media),
+    [data]
+  );
+  console.log("mediaDetails", data?.Media?.characters);
   return (
     <Layout isSingle={true}>
-      <BannerImage />
+      <BannerImage image={mediaDetails?.bannerImage!} />
       <Wrapper>
         <Details>
           <StyledImage
-            src="https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx146065-IjirxRK26O03.png"
+            src={mediaDetails?.coverImage?.large!}
             alt="cover-image"
           />
           <Content>
-            <h5>Mushoku Tensei II: Isekai Ittara Honki Dasu</h5>
-            <Summary>
-              Gold Roger was known as the Pirate King, the strongest and most
-              infamous being to have sailed the Grand Line. The capture and
-              death of Roger by the World Government brought a change throughout
-              the world. His last words before his death revealed the location
-              of the greatest treasure in the world, One Piece. It was this
-              revelation that brought about the Grand Age of Pirates, men who
-              dreamed of finding One Piece (which promises an unlimited amount
-              of riches and fame), and quite possibly the most coveted of titles
-              for the person who found it, the title of the Pirate King.
-            </Summary>
+            <h5>{mediaDetails?.title?.userPreferred}</h5>
+            {mediaDetails?.description && (
+              <Summary
+                dangerouslySetInnerHTML={{ __html: mediaDetails?.description }}
+              />
+            )}
           </Content>
         </Details>
       </Wrapper>
       <Details>
         <SideInfo>
           <Information>
-            <Data type="Format" value="TV" />
-            <Data type="Episode Duration" value="24 mins" />
-            <Data type="Status" value="Releasing" />
-            <Data type="Start Date" value="Oct 20, 1999" />
-            <Data type="Season" value="Fall 1999" />
+            <Data type="Format" value={mediaDetails?.format?.toString()} />
+            <Data
+              type="Episode Duration"
+              value={`${mediaDetails?.duration} mins`}
+            />
+            <Data type="Status" value={mediaDetails?.status?.toString()} />
+            <Data
+              type="Popularity"
+              value={mediaDetails?.popularity?.toString()}
+            />
+            <Data
+              type="Favourits"
+              value={mediaDetails?.favourites?.toString()}
+            />
           </Information>
         </SideInfo>
         <Content>
           <h6>Characters</h6>
           <CharactersContainer>
-            <CharacterCard></CharacterCard>
-            <CharacterCard></CharacterCard>
-            <CharacterCard></CharacterCard>
-            <CharacterCard></CharacterCard>
-            <CharacterCard></CharacterCard>
-            <CharacterCard></CharacterCard>
-            <CharacterCard></CharacterCard>
-            <CharacterCard></CharacterCard>
-            <CharacterCard></CharacterCard>
-            <CharacterCard></CharacterCard>
+            {data?.Media?.characters?.nodes?.map((character) => (
+              <CharacterCard
+                name={character?.name?.userPreferred}
+                image={character?.image?.large}
+                gender={character?.gender}
+              />
+            ))}
           </CharactersContainer>
         </Content>
       </Details>
@@ -60,9 +88,9 @@ const Single = () => {
   );
 };
 
-const BannerImage = styled.div`
+const BannerImage = styled.div<BannerProps>`
   height: 350px;
-  background-image: url(https://s4.anilist.co/file/anilistcdn/media/anime/banner/146065-33RDijfuxLLk.jpg);
+  background-image: ${({ image }) => (image ? `url(${image})` : null)};
   background-position: 50% 35%;
   background-repeat: no-repeat;
   background-size: cover;
