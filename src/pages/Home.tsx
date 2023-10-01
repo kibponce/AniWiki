@@ -14,7 +14,7 @@ const Home = () => {
   const [page, setPage] = useState(1);
   const [search, setSearch] = useState<string | null>(null);
   const [mediaLists, setMediaLists] = useState<Array<Media | null>>([]);
-  const { loading, error, data, refetch } = useQuery(getMediaListQuery, {
+  const { loading, error, data } = useQuery(getMediaListQuery, {
     variables: {
       search: search,
       page: page,
