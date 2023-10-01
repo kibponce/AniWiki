@@ -41,7 +41,7 @@ const Home = () => {
         }
       }
     },
-    [data, loading]
+    [loading]
   );
 
   useEffect(() => {
