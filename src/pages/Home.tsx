@@ -7,49 +7,55 @@ import Input from "../components/Input";
 import Card from "../components/Card";
 // GraphQL - media service
 import { getMediaListQuery, Media, MediaSort } from "../service/media";
-import { debounce, isEmpty } from "lodash";
+import { debounce } from "lodash";
 
 const Home = () => {
   const loader = useRef(null);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState<string | null>(null);
   const [mediaLists, setMediaLists] = useState<Array<Media | null>>([]);
   const { loading, error, data, refetch } = useQuery(getMediaListQuery, {
     variables: {
+      search: search,
       page: page,
-      perPage: 10,
+      perPage: 20,
       sort: [MediaSort.TrendingDesc, MediaSort.PopularityDesc],
     },
   });
 
   const handleSearch = debounce((e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-    // reset the current page
+    // reset the current page to refresh the list
     setPage(1);
-    refetch({
-      search: !isEmpty(value) ? value : null,
-    });
+    setSearch(value);
   }, 500);
 
   const handleObserver = useCallback(
     (entries: any[]) => {
       const target = entries[0];
-      const hasNextPage = data?.Page?.pageInfo?.hasNextPage || false;
-      if (target.isIntersecting && hasNextPage) {
-        setPage((prev) => prev + 1);
+      // check if the DOM intersect the viewport
+      if (target.isIntersecting) {
+        // check if request is done
+        if (!loading) {
+          setPage((prev) => prev + 1);
+        }
       }
     },
-    [data]
+    [data, loading]
   );
 
   useEffect(() => {
-    const option = {
+    const observer = new IntersectionObserver(handleObserver, {
       root: null,
       rootMargin: "20px",
       threshold: 0,
-    };
-    const observer = new IntersectionObserver(handleObserver, option);
+    });
+
     if (loader.current) observer.observe(loader.current);
-  }, [handleObserver, loader]);
+
+    // disconnect observer when unmount
+    return () => observer && observer.disconnect();
+  }, [handleObserver]);
 
   useEffect(() => {
     const mediaCollection = data?.Page?.media || [];
