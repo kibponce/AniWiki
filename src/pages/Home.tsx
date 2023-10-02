@@ -10,14 +10,12 @@ import { getMediaListQuery, Media, MediaSort } from "../service/media";
 import { debounce } from "lodash";
 
 const Home = () => {
-  const loader = useRef(null);
-  const [page, setPage] = useState(1);
-  const [search, setSearch] = useState<string | null>(null);
+  const scrollObserver = useRef(null);
   const [mediaLists, setMediaLists] = useState<Array<Media | null>>([]);
-  const { loading, error, data } = useQuery(getMediaListQuery, {
+  const { loading, error, data, refetch } = useQuery(getMediaListQuery, {
     variables: {
-      search: search,
-      page: page,
+      search: null,
+      page: 1,
       perPage: 20,
       sort: [MediaSort.TrendingDesc, MediaSort.PopularityDesc],
     },
@@ -26,8 +24,10 @@ const Home = () => {
   const handleSearch = debounce((e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     // reset the current page to refresh the list
-    setPage(1);
-    setSearch(value);
+    refetch({
+      search: value,
+      page: 1,
+    });
   }, 500);
 
   const handleObserver = useCallback(
@@ -35,13 +35,17 @@ const Home = () => {
       const target = entries[0];
       // check if the DOM intersect the viewport
       if (target.isIntersecting) {
+        const hasNextPage = data?.Page?.pageInfo?.hasNextPage;
+        const currentPage = data?.Page?.pageInfo?.currentPage || 0;
         // check if request is done
-        if (!loading) {
-          setPage((prev) => prev + 1);
+        if (!loading && hasNextPage) {
+          refetch({
+            page: currentPage + 1,
+          });
         }
       }
     },
-    [loading]
+    [loading, data]
   );
 
   useEffect(() => {
@@ -51,7 +55,7 @@ const Home = () => {
       threshold: 0,
     });
 
-    if (loader.current) observer.observe(loader.current);
+    if (scrollObserver.current) observer.observe(scrollObserver.current);
 
     // disconnect observer when unmount
     return () => observer && observer.disconnect();
@@ -59,13 +63,12 @@ const Home = () => {
 
   useEffect(() => {
     const mediaCollection = data?.Page?.media || [];
+    const currentPage = data?.Page?.pageInfo?.currentPage;
 
-    if (page === 1) {
-      setMediaLists(mediaCollection);
-    } else {
-      setMediaLists((prev) => [...prev, ...mediaCollection]);
-    }
-  }, [data, page]);
+    currentPage === 1
+      ? setMediaLists(mediaCollection)
+      : setMediaLists((prev) => [...prev, ...mediaCollection]);
+  }, [data]);
 
   return (
     <Layout>
@@ -87,7 +90,7 @@ const Home = () => {
         {loading && <p>Loading...</p>}
         {error && <p>{error.message}</p>}
       </ListsContainer>
-      <div ref={loader}></div>
+      <div ref={scrollObserver}></div>
     </Layout>
   );
 };
