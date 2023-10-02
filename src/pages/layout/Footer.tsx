@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { media } from "../../utils/styles";
 
 const Footer = () => {
-  return <StyledFooter></StyledFooter>;
+  return <StyledFooter>Copyright © 2023 AnimeWiki by kibponce</StyledFooter>;
 };
 
 const StyledFooter = styled.div`
