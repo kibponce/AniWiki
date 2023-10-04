@@ -5,7 +5,7 @@ import { size } from "../utils/styles";
 
 interface QueryResultProps {
   loading: boolean;
-  error?: ApolloError | undefined;
+  error?: ApolloError;
   data?: unknown;
 }
 
