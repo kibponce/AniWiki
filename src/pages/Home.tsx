@@ -88,7 +88,7 @@ const Home = () => {
         )}
         {/* TODO: enhance UI */}
         {loading && <p>Loading...</p>}
-        {error && <p>{error.message}</p>}
+        {!!error && <p>{error.message}</p>}
       </ListsContainer>
       <div ref={scrollObserver}></div>
     </Layout>
