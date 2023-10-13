@@ -38,7 +38,7 @@ const Single = () => {
       <QueryResult loading={loading} error={error} data={data}>
         <BannerImage image={mediaDetails?.bannerImage!} />
         <Wrapper>
-          <Details>
+          <Section>
             <StyledImage
               src={mediaDetails?.coverImage?.large!}
               alt="cover-image"
@@ -53,9 +53,9 @@ const Single = () => {
                 />
               )}
             </Content>
-          </Details>
+          </Section>
         </Wrapper>
-        <Details>
+        <Section>
           <SideInfo>
             <Information>
               <Data type="Format" value={mediaDetails?.format?.toString()} />
@@ -86,7 +86,7 @@ const Single = () => {
               ))}
             </CharactersContainer>
           </Content>
-        </Details>
+        </Section>
       </QueryResult>
     </Layout>
   );
@@ -106,7 +106,7 @@ const Wrapper = styled.div`
   background: #ffffff;
 `;
 
-const Details = styled.div`
+const Section = styled.section`
   height: 100%;
   width: ${size.xl};
   margin: 0 auto;
@@ -134,7 +134,7 @@ const StyledImage = styled.img`
   `}
 `;
 
-const Content = styled.div`
+const Content = styled.article`
   display: flex;
   flex-direction: column;
 `;
@@ -144,7 +144,7 @@ const Summary = styled.div`
   margin-top: 10px;
 `;
 
-const SideInfo = styled.div`
+const SideInfo = styled.aside`
   border-radius: 2px;
   width: 100%;
   background: #ffffff;

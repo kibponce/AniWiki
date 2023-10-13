@@ -21,7 +21,7 @@ const Header: FC<HeaderProps> = ({ isSingle }) => {
   );
 };
 
-const StyledHeader = styled.div<HeaderProps>`
+const StyledHeader = styled.header<HeaderProps>`
   display: flex;
   min-height: 75px;
   background: #2b2d42;
@@ -39,7 +39,7 @@ const Container = styled.div`
   `}
 `;
 
-const HeaderBar = styled.div`
+const HeaderBar = styled.nav`
   display: flex;
   align-items: center;
   height: 100%;

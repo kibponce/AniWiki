@@ -10,20 +10,15 @@ interface LayoutProps {
 
 const Layout: FC<PropsWithChildren<LayoutProps>> = ({ children, isSingle }) => {
   return (
-    <StyledLayout>
+    <>
       <Header isSingle={isSingle} />
-      <Body>{children}</Body>
+      <Content>{children}</Content>
       <Footer />
-    </StyledLayout>
+    </>
   );
 };
 
-const StyledLayout = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const Body = styled.div`
+const Content = styled.div`
   min-height: calc(100vh - 150px);
   display: flex;
   flex-direction: column;

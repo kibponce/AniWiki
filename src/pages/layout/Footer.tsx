@@ -5,7 +5,7 @@ const Footer = () => {
   return <StyledFooter>Copyright © 2023 AnimeWiki by kibponce</StyledFooter>;
 };
 
-const StyledFooter = styled.div`
+const StyledFooter = styled.footer`
   display: flex;
   min-height: 75px;
   background: #2b2d42;
