@@ -18,7 +18,7 @@ const Layout: FC<PropsWithChildren<LayoutProps>> = ({ children, isSingle }) => {
   );
 };
 
-const Content = styled.div`
+const Content = styled.main`
   min-height: calc(100vh - 150px);
   display: flex;
   flex-direction: column;
